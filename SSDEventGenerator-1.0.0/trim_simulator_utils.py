@@ -80,8 +80,8 @@ def trim_simulator_event_formatter(events):
 def trim_simulator_export_event(command_durt, activity):
 	statistic_fp = open("statistic.csv", 'w')
 	for key, value in command_durt.items():
-		statistic_fp.write("%s  %.10f\n"%(key, value))
+		statistic_fp.write("%s  %.9f\n"%(key, value))
 
 	activity_fp = open("activity.csv", "w")
 	for key in sorted(activity):
-		activity_fp.write("%.10lf  %s  %s  %s\n"%(key, activity[key][0], activity[key][1][0], activity[key][1][1]))
+		activity_fp.write("%.9lf  %s  %s  %s\n"%(key, activity[key][0], activity[key][1][0], activity[key][1][1]))

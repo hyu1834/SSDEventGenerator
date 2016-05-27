@@ -34,7 +34,7 @@ class SSD_Event_Generator(object):
 	def capture_simulate_event(self):
 		# 8,0    1       70     0.000039646   213  D  WS 415398104 + 176 [jbd2/sda5-8]
 		# 8,0    1       71     0.000288625     0  C  WS 415398104 + 176 [0]
-		CLOCK_SPEED = 0.000001000
+		CLOCK_SPEED = 0.000000010
 		clock = 0.0
 		events = {}
 		
@@ -69,7 +69,7 @@ class SSD_Event_Generator(object):
 
 			clock += CLOCK_SPEED
 
-		return ["8,0    1       %s     %.10f   213  %s  %s %s + %s"%(seq_num, key, events[key][0], events[key][1], events[key][2], events[key][3]) for seq_num, key in enumerate(sorted(events.keys()))]
+		return ["8,0    1       %s     %.9f   213  %s  %s %s + %s"%(seq_num, key, events[key][0], events[key][1], events[key][2], events[key][3]) for seq_num, key in enumerate(sorted(events.keys()))]
 
 	def capture_event(self):
 		if self.real_event_capture and capture_duration > 0:
