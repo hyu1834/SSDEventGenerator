@@ -18,10 +18,10 @@ None
 N/A
 
 ##Usage: 
-python ssd_event_generator -r duration(second)\n
-python ssd_event_generator --real duration(second)\n
-python ssd_event_generator -s duration(second) real_time write_time trim_time\n
-python ssd_event_generator --simulate duration(second) real_time write_time trim_time\n
+python ssd_event_generator -r duration(second)<br />
+python ssd_event_generator --real duration(second)<br />
+python ssd_event_generator -s duration(second) real_time write_time trim_time<br />
+python ssd_event_generator --simulate duration(second) real_time write_time trim_time
 
 #####Acknowledgement: 
 SSDEventGenerator is proposed and approved class project for ECS251 by Professor Wu, Department of Computer Science, University of California, Davis.
