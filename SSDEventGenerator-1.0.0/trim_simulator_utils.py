@@ -43,14 +43,14 @@ def trim_simulator_event_formatter(events):
 
 		# print(len(activity_log))
 		if action_type == "D":
-			match = re.match("(\d+\+\d+).*$", description)
-			if match and match.groups()[0]:
-				activity_log[match.groups()[0]] = (seconds, rwbs)
+			match = re.match("(\d+)\+(\d+).*$", description)
+			if match and len(match.groups()) == 2:
+				activity_log[match.groups()] = (seconds, rwbs)
 		elif action_type == "C":
 			try:
-				match = re.match("(\d+\+\d+).*$", description)
-				if match and match.groups()[0] and activity_log[match.groups()[0]]:
-					time_diff = seconds - activity_log[match.groups()[0]][0]
+				match = re.match("(\d+)\+(\d+).*$", description)
+				if match and len(match.groups()) == 2 and activity_log[match.groups()]:
+					time_diff = seconds - activity_log[match.groups()][0]
 					# print(time_diff)
 					if time_diff > 0:
 						if "D" in rwbs:
@@ -63,9 +63,9 @@ def trim_simulator_event_formatter(events):
 						command_durt[command_type] += time_diff
 						rwbs_count[command_type] += 1
 
-						activity[activity_log[match.groups()[0]][0]] = command_type
+						activity[activity_log[match.groups()][0]] = (command_type, match.groups())
 
-					del activity_log[match.groups()[0]]
+					del activity_log[match.groups()]
 			except KeyError:
 				continue
 
@@ -84,4 +84,4 @@ def trim_simulator_export_event(command_durt, activity):
 
 	activity_fp = open("activity.csv", "w")
 	for key in sorted(activity):
-		activity_fp.write("%.10lf  %s\n"%(key, activity[key]))
+		activity_fp.write("%.10lf  %s  %s  %s\n"%(key, activity[key][0], activity[key][1][0], activity[key][1][1]))

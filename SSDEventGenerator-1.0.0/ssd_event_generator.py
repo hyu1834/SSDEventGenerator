@@ -37,34 +37,35 @@ class SSD_Event_Generator(object):
 		CLOCK_SPEED = 0.000001000
 		clock = 0.0
 		events = {}
-		event_id = random.randint(100000000, 999999999)
+		
 		# start generate
 		while(clock < self.capture_duration):
 			# print("%.10f"%clock)
 			event_type = random.randint(0, 10) 
 			# no event
 			if event_type == 1:
+				starting_block = random.randint(100000000, 999999999)
+				next_n_block = random.randint(1, 1024)
 				rwbs = random.randint(0, 2)
 				command_issue_time = clock
-				
-				offset = random.randint(1, 1024)
+
 				# read
 				if rwbs == 0:
 					command_compt_time = clock + self.read_time
-					events[command_issue_time] = ("D", "R", event_id, offset)#"8,0    1       %s     %.10f   213  D  R %s"%(seq_number, command_issue_time, event_id)
-					events[command_compt_time] = ("C", "R", event_id, offset)#"8,0    1       %s     %.10f   213  C  R %s"%(seq_number + 1, command_compt_time, event_id)
+					events[command_issue_time] = ("D", "R", starting_block, next_n_block)
+					events[command_compt_time] = ("C", "R", starting_block, next_n_block)
 				# write
 				elif rwbs == 1:
 					command_compt_time = clock + self.write_time
-					events[command_issue_time] = ("D", "W", event_id, offset)#"8,0    1       %s     %.10f   213  D  W %s"%(seq_number, command_issue_time, event_id)
-					events[command_compt_time] = ("C", "W", event_id, offset)#"8,0    1       %s     %.10f   213  C  W %s"%(seq_number + 1, command_compt_time, event_id)
+					events[command_issue_time] = ("D", "W", starting_block, next_n_block)
+					events[command_compt_time] = ("C", "W", starting_block, next_n_block)
 				# trim
 				else:
 					command_compt_time = clock + self.trim_time
-					events[command_issue_time] = ("D", "D", event_id, offset)#"8,0    1       %s     %.10f   213  D  D %s"%(seq_number, command_issue_time, event_id)
-					events[command_compt_time] = ("C", "D", event_id, offset)#"8,0    1       %s     %.10f   213  C  D %s"%(seq_number + 1, command_compt_time, event_id)
+					events[command_issue_time] = ("D", "D", starting_block, next_n_block)
+					events[command_compt_time] = ("C", "D", starting_block, next_n_block)
 
-				event_id += 1
+				# event_id += 1
 
 			clock += CLOCK_SPEED
 
