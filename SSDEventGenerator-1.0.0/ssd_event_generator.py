@@ -24,15 +24,12 @@ class SSD_Event_Generator(object):
 
 	def capture_real_event(self):
 		# container for list of events
-		events = []
 		cmd = "sudo blktrace -a read -a write -a discard -w %d -d /dev/sda -o - | blkparse -i -"%(self.capture_duration)
-		execute, message = execute_bash_command(cmd, self.capture_duration + 5)
+		execute, message = bash_utils.execute_bash_command(cmd, self.capture_duration + 5)
 		if not execute:
 			io_utils.stderr("Unable to capture real even, try simulate mode", terminate = True)	
 
-		print message
-		events = message.split("\n")
-		return events
+		return message.split("\n")
 
 	def capture_simulate_event(self):
 		# 8,0    1       70     0.000039646   213  D  WS 415398104 + 176 [jbd2/sda5-8]
@@ -75,7 +72,7 @@ class SSD_Event_Generator(object):
 
 	def capture_event(self):
 		if self.real_event_capture and capture_duration > 0:
-			return self.capture_real_event()
+			return trim_simulator_utils.trim_simulator_event_formatter(self.capture_real_event())
 		elif self.simulate_event_capture and capture_duration > 0 and read_time > 0 and write_time > 0 and trim_time > 0:
 			return trim_simulator_utils.trim_simulator_event_formatter(self.capture_simulate_event())
 		else:
