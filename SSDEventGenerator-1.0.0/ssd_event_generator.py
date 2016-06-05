@@ -51,35 +51,36 @@ class SSD_Event_Generator(object):
 				if event_type == 1:
 					starting_block = random.randint(100000000, 999999999)
 					next_n_block = random.randint(1, 1024)
-					rwbs = random.randint(0, 2)
+					rwbs = random.random()
+					# print(rwbs)
+					# rwbs = random.randint(0, 2)
 					command_issue_time = clock
 
 					# read
-					if rwbs == 0:
+					if 0 <= rwbs < 0.45:
 						command_compt_time = clock + self.read_time
 						events[command_issue_time] = ("D", "R", starting_block, next_n_block)
 						events[command_compt_time] = ("C", "R", starting_block, next_n_block)
 						if self.read_time > longest_event_time:
-							longest_event_time = self.read_time
+							longest_event_time = CLOCK_SPEED#self.read_time
 					# write
-					elif rwbs == 1:
+					elif 0.45 <= rwbs < 0.55:
 						command_compt_time = clock + self.write_time
 						events[command_issue_time] = ("D", "W", starting_block, next_n_block)
 						events[command_compt_time] = ("C", "W", starting_block, next_n_block)
 						if self.write_time > longest_event_time:
-							longest_event_time = self.write_time
+							longest_event_time = CLOCK_SPEED#self.write_time
 					# trim
 					else:
 						command_compt_time = clock + self.trim_time
 						events[command_issue_time] = ("D", "D", starting_block, next_n_block)
 						events[command_compt_time] = ("C", "D", starting_block, next_n_block)
 						if self.trim_time > longest_event_time:
-							longest_event_time = self.trim_time
+							longest_event_time = CLOCK_SPEED#self.trim_time
 				else:
 					longest_event_time += CLOCK_SPEED
 
 			clock += longest_event_time
-			# print("%.9lf"%clock)
 
 		return ["8,0    1       %s     %.9f   213  %s  %s %s + %s"%(seq_num, key, events[key][0], events[key][1], events[key][2], events[key][3]) for seq_num, key in enumerate(sorted(events.keys()))]
 
